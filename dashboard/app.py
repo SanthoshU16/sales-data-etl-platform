@@ -3,17 +3,20 @@ from pathlib import Path
 
 import pandas as pd
 import streamlit as st
-from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 
 
 # ============================================================
-# LOAD ENVIRONMENT VARIABLES
+# CONFIGURATION
+# Supports both Streamlit Cloud (st.secrets) and local (.env)
 # ============================================================
 
-BASE_DIR = Path(__file__).resolve().parents[1]
-
-load_dotenv(BASE_DIR / ".env")
+def _get_secret(key: str) -> str:
+    """Read a secret from st.secrets (Streamlit Cloud) or os.environ (local)."""
+    try:
+        return st.secrets["postgres"][key]
+    except (KeyError, FileNotFoundError):
+        return os.getenv(key, "")
 
 
 # ============================================================
@@ -24,11 +27,11 @@ load_dotenv(BASE_DIR / ".env")
 def get_engine():
     database_url = (
         f"postgresql+psycopg2://"
-        f"{os.getenv('POSTGRES_USER')}:"
-        f"{os.getenv('POSTGRES_PASSWORD')}@"
-        f"{os.getenv('POSTGRES_HOST')}:"
-        f"{os.getenv('POSTGRES_PORT')}/"
-        f"{os.getenv('POSTGRES_DB')}"
+        f"{_get_secret('POSTGRES_USER')}:"
+        f"{_get_secret('POSTGRES_PASSWORD')}@"
+        f"{_get_secret('POSTGRES_HOST')}:"
+        f"{_get_secret('POSTGRES_PORT')}/"
+        f"{_get_secret('POSTGRES_DB')}"
     )
 
     return create_engine(database_url)
