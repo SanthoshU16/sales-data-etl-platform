@@ -30,3 +30,10 @@ htmlcov/
 .DS_Store
 .idea/
 .vscode/
+
+# Local backup / full venv dump
+requirements-full.txt
+
+# Generated data (re-creatable by running the pipeline)
+data/processed/*.csv
+data/errors/*.csv
