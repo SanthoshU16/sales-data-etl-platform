@@ -8,39 +8,30 @@ An end-to-end Sales Data ETL (Extract, Transform, Load) Pipeline and Analytics P
 sales-data-etl-platform/
 │
 ├── data/
-│   ├── raw/                  # Source CSV/JSON files
-│   │   ├── orders.csv
-│   │   ├── customers.csv
-│   │   └── products.json
-│   ├── processed/            # Cleaned / staging data
-│   └── errors/               # Records that failed validation
+│   ├── raw/                  # Raw dataset (Online Retail.xlsx)
+│   ├── processed/            # Cleaned & transformed data (sales_processed.csv)
+│   └── errors/               # Records that failed validation (validation_errors.csv)
 │
 ├── src/                      # Core ETL logic
-│   ├── extraction/           # Extraction modules (CSV, JSON, API)
-│   ├── transformation/       # Cleaning & transformation modules
-│   ├── validation/           # Data quality & schema validators
-│   ├── loading/              # Data warehouse loaders (PostgreSQL)
-│   ├── database/             # DB connection & DDL schemas
-│   └── pipeline.py           # Pipeline orchestration script
+│   ├── extraction/           # Extraction & profiling modules (ExcelReader, profiler)
+│   ├── validation/           # Data quality & schema validator (DataValidator)
+│   ├── transformation/       # Cleaning & transformation modules (DataTransformer)
+│   ├── loading/              # Data warehouse loaders (WarehouseLoader)
+│   ├── database/             # PostgreSQL DB connection
+│   └── utils/                # Logging utility
 │
-├── airflow/                  # Airflow DAGs and plugins
-│   ├── dags/
-│   └── plugins/
+├── sql/                      # Data warehouse & analytics SQL scripts
+│   ├── 01_create_schema.sql
+│   ├── 02_create_dimensions.sql
+│   ├── 03_create_fact.sql
+│   ├── 04_create_indexes.sql
+│   └── analytics/            # Analytical SQL queries (01 to 08)
 │
-├── sql/                      # SQL scripts
-│   ├── staging/              # Staging table DDL
-│   ├── warehouse/            # Data warehouse schema DDL
-│   └── analytics/            # Analytical queries (revenue, products, etc.)
+├── dashboard/                # Streamlit analytics dashboard
+│   └── app.py
 │
-├── dashboard/                # Analytics dashboard application
-│   ├── app.py
-│   └── queries.py
-│
-├── tests/                    # Unit and integration tests
-├── config/                   # Configuration files (YAML)
-├── logs/                     # Pipeline execution logs
-├── docker/                   # Dockerfiles
-├── docker-compose.yml        # Multi-container orchestration (Postgres, Airflow, etc.)
+├── logs/                     # Pipeline execution logs (etl.log)
+├── docker-compose.yml        # PostgreSQL service container
 ├── requirements.txt          # Python dependencies
 ├── .env.example              # Template environment variables
 ├── .gitignore
